@@ -6,9 +6,7 @@ bin-release/
 
 # Other files and folders
 .settings/
-.idea/
-*.gitignore
-*.gitattributes
+
 
 # Executables
 
@@ -22,3 +20,6 @@ bin-release/
 # information for Eclipse / Flash Builder.
 *.xml
 .idea/vcs.xml
+.idea/
+*.gitignore
+*.gitattributes
