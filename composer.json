@@ -1,0 +1,12 @@
+{
+    "name": "bradnorok/mvc",
+    "autoload": {
+        "psr-4": {
+            "Core\\": "Core/",
+            "App\\": "App/"
+        }
+    },
+    "require": {
+        "larapack/dd": "1.*"
+    }
+}
