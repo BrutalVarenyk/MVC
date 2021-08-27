@@ -3,6 +3,8 @@
 namespace Core;
 
 
+use Exception;
+
 class Router
 {
     /**
@@ -13,7 +15,7 @@ class Router
 
     protected $params = [];
 
-    protected  $convertTypes = [
+    protected $convertTypes = [
         'd' => 'int',
         's' => 'string'
     ];
@@ -28,29 +30,20 @@ class Router
      */
     public function add(string $route, array $params = [])
     {
-        echo '1 route = ' . $route . '<br>';
         // Convert to route to a regular expression: escape forward slashes
-        $route = preg_replace("/\//","\\/", $route);
-//        echo '2 route = ' . $route . '<br>';
+        $route = preg_replace("/\//", "\\/", $route);
 
         // Convert variables e.g. {controller}
         $route = preg_replace("/\{([a-z]+)\}/", '(?P<\1>[a-z-]+)', $route);
-//        echo '3 route = ' . $route . '<br>';
 
         // Convert variables with custom regular expressions e.g. {id:\d+}
         //?P - grouping
         $route = preg_replace("/\{([a-z]+):([^\}]+)\}/", '(?P<\1>\2)', $route);
-//        echo '4 route = ' . $route . '<br>';
 
         // Add start and end delimiters, and case-insensitive flag
         $route = "/^{$route}$/i";
-//        echo '5 route = ' . $route . '<br>';
 
         $this->routes[$route] = $params;
-
-//        echo '6 route =';
-//        echo '<pre>' . var_dump($this->routes) . '</pre> <br>';
-
     }
 
     public function getRoutes(): array
@@ -74,7 +67,7 @@ class Router
      */
     public function match($url): bool
     {
-        foreach ($this->routes as $route => $params){
+        foreach ($this->routes as $route => $params) {
 
             /**
              * e.g.
@@ -87,7 +80,7 @@ class Router
              * ]
              */
 
-            if(preg_match($route, $url, $matches)){
+            if (preg_match($route, $url, $matches)) {
 
                 /**
                  * e.g.
@@ -115,10 +108,8 @@ class Router
                  */
 
                 $step = 0;
-                foreach ($matches as $key => $match){
-                    if(is_string($key)){
-
-//                        dd($key);
+                foreach ($matches as $key => $match) {
+                    if (is_string($key)) {
 
                         $type = trim($types[1][$step], "+");
 
@@ -150,31 +141,31 @@ class Router
     public function dispatch(string $url = "")
     {
 
-        $url =$this->removeQueryStringVariables($url);
+        $url = $this->removeQueryStringVariables($url);
 
-        if($this->match($url)){
+        if ($this->match($url)) {
             $controller = $this->params["controller"];
             $controller = $this->getNamespace() . $controller;
 //            $this->convertToStudlyCaps($controller)
 
-            if (class_exists($controller)){
+            if (class_exists($controller)) {
                 $controllerObject = new $controller($this->params);
 
                 $action = $this->params["action"];
 //                $action = $this->convertToCamelCase($action);
 
-                if (preg_match("/action$/i", $action) == 0){
+                if (preg_match("/action$/i", $action) == 0) {
                     call_user_func([$controllerObject, $action]);
-                }else{
+                } else {
                     $msg = "Method {$action} in controller {$controller} can not be directly called" .
                         " - remove the Action suffix to call this method";
-                    throw new \Exception($msg);
+                    throw new Exception($msg);
                 }
-            }else{
-                throw new \Exception("controller class {$controller} not found");
+            } else {
+                throw new Exception("controller class {$controller} not found");
             }
-        }else{
-            throw new \Exception("No route matched", 404);
+        } else {
+            throw new Exception("No route matched", 404);
         }
 
     }
@@ -200,12 +191,12 @@ class Router
 
     protected function removeQueryStringVariables(string $url): string
     {
-        if ($url != ""){
-            $parts = explode("&", $url,2);
+        if ($url != "") {
+            $parts = explode("&", $url, 2);
 
-            if (strpos($parts[0], "=") === false){
+            if (strpos($parts[0], "=") === false) {
                 $url = $parts[0];
-            }else{
+            } else {
                 $url = "";
             }
         }
@@ -220,7 +211,7 @@ class Router
     {
         $namespace = $this->controllerNamespace;
 
-        if (array_key_exists('namespace', $this->params)){
+        if (array_key_exists('namespace', $this->params)) {
             $namespace .= $this->params["namespace"] . "\\";
         }
 

@@ -10,4 +10,9 @@ class Posts
 
     }
 
+    public function index()
+    {
+
+    }
+
 }
