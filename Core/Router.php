@@ -67,6 +67,7 @@ class Router
      */
     public function match($url): bool
     {
+//        dd($url);
         foreach ($this->routes as $route => $params) {
 
             /**
@@ -74,14 +75,15 @@ class Router
              * $this->routes
              * array:1 [▼
              * "/^posts\/(?P<id>\d+)\/show$/i" => array:2 [▼
-             *          "controller" => "Posts"
+             *          "controller" => "ArticlesController"
              *          "action" => "show"
              *          ]
              * ]
              */
-
+//            preg_match('/^posts\/(?P<id>\d)\/show$/i', $url);
+//            dd($this->routes, '/^posts\/(?P<id>\d)\/show$/i', $url, preg_match('/^posts\/(?P<id>\d+)\/show$/i', $url));
             if (preg_match($route, $url, $matches)) {
-
+//            dd($matches);
                 /**
                  * e.g.
                  * $matches
@@ -125,7 +127,7 @@ class Router
                  * e.g.
                  * $params
                  * array:3 [▼
-                 * "controller" => "Posts"
+                 * "controller" => "ArticlesController"
                  * "action" => "show"
                  * "id" => 5
                  * ]
@@ -142,20 +144,25 @@ class Router
     {
 
         $url = $this->removeQueryStringVariables($url);
-
+//        dd($this->match($url));
         if ($this->match($url)) {
             $controller = $this->params["controller"];
+            unset($this->params["controller"]);
             $controller = $this->getNamespace() . $controller;
-//            $this->convertToStudlyCaps($controller)
+            $this->convertToStudlyCaps($controller);
 
             if (class_exists($controller)) {
+
                 $controllerObject = new $controller($this->params);
 
-                $action = $this->params["action"];
-//                $action = $this->convertToCamelCase($action);
+//                dd($controllerObject, $this->params);
 
+                $action = $this->params["action"];
+                unset($this->params["action"]);
+                $action = $this->convertToCamelCase($action);
+//                dd($this->params);
                 if (preg_match("/action$/i", $action) == 0) {
-                    call_user_func([$controllerObject, $action]);
+                    call_user_func_array([$controllerObject, $action], $this->params);
                 } else {
                     $msg = "Method {$action} in controller {$controller} can not be directly called" .
                         " - remove the Action suffix to call this method";

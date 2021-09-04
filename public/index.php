@@ -5,6 +5,9 @@ error_reporting(-1);
 
 require_once "../vendor/autoload.php";
 
+$dotenv = \Dotenv\Dotenv::createUnsafeImmutable(__DIR__ . "/../");
+$dotenv->load(); //Know the difference
+
 use Core\Router;
 
 // 1 - RouterInstance
