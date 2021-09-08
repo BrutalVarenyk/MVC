@@ -148,6 +148,7 @@ class Router
         if ($this->match($url)) {
             $controller = $this->params["controller"];
             unset($this->params["controller"]);
+//            dd($controller);
             $controller = $this->getNamespace() . $controller;
             $this->convertToStudlyCaps($controller);
 
@@ -162,6 +163,8 @@ class Router
                 $action = $this->convertToCamelCase($action);
 //                dd($this->params);
                 if (preg_match("/action$/i", $action) == 0) {
+//                    call_user_func_array(['Core\View', 'render'], ['user/users/login.php']);
+//                    dd(1);
                     call_user_func_array([$controllerObject, $action], $this->params);
                 } else {
                     $msg = "Method {$action} in controller {$controller} can not be directly called" .

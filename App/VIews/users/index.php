@@ -1,8 +1,15 @@
+<?php
+require getenv("VIEWROOT") . "/includes/head.php";
+?>
 
-<style type="text/css">
-<?php require 'style/users.css' ?>
-</style>
+<div class="navbar">
+    <?php
+    require getenv("VIEWROOT") . "/includes/navigation.php";
+    ?>
+</div>
+
 <div class = 'all-Users'>
+    <h2>Registered users of site:</h2>
 <?php
 
 //require 'users.css';
@@ -12,10 +19,11 @@
  */
 function allUsers($user)
 {
+    $urlroot = getenv("URLROOT");
     echo <<<AA
-    <div>
-    <a href="http://mvc/users/{$user->getId()}/show">{$user->fullName()}</a>
-    </div>
+    <p>
+    <a href="{$urlroot}/users/{$user->getId()}/show">{$user->fullName()}</a>
+    </p>
 AA;
 
 

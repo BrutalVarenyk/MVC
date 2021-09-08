@@ -192,3 +192,17 @@ vendor/vlucas/phpdotenv/src/Store/StringStore.php
 vendor/vlucas/phpdotenv/src/Util/Regex.php
 vendor/vlucas/phpdotenv/src/Util/Str.php
 vendor/vlucas/phpdotenv/src/Validator.php
+.idea/MVC.iml
+.idea/vcs.xml
+vendor/symfony/var-dumper/Dumper/HtmlDumper.php
+vendor/composer/installed.php
+vendor/composer/installed.json
+vendor/composer/autoload_static.php
+vendor/composer/autoload_psr4.php
+vendor/composer/autoload_files.php
+vendor/composer/autoload_files.php
+vendor/composer/autoload_psr4.php
+vendor/composer/autoload_static.php
+vendor/composer/installed.json
+vendor/composer/installed.php
+vendor/symfony/var-dumper/Dumper/HtmlDumper.php
